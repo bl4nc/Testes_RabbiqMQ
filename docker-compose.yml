@@ -1,0 +1,28 @@
+version : '3'
+
+services: 
+# NODES
+  rabbit_mq_sv :
+    image: nginx:1.21.6-alpine
+    container_name: svd
+    ports: 
+      - "80"
+    volumes:
+      - ./config/nginx_nodes/site.conf:/etc/nginx/conf.d/site.conf
+      - ./r_producer:/r_producer
+      - ./r_cosumer:/r_cosumer
+    links:
+      - r_producer
+      - r_cosumer
+  
+  r_producer:
+       build: r_producer
+       container_name: r_producer
+       volumes:
+           - ./r_producer:/r_producer
+
+  r_cosumer:
+       build: r_cosumer
+       container_name: r_cosumer
+       volumes:
+           - ./r_cosumer:/r_cosumer
